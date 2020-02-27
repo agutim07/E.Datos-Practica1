@@ -114,7 +114,7 @@ public Person refundSeat(int pos) {
 	if (seats[pos-1] == null) {
 		return null;
 	}
-	return Seat.getHolder();
+	return seats[pos-1].getHolder();
 }
 
 
