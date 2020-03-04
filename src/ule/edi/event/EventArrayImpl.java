@@ -215,35 +215,72 @@ public List<Integer> getAdvanceSaleSeatsList() {
 
 @Override
 public int getMaxNumberConsecutiveSeats() {
-	// TODO Auto-generated method stub
-	return 0;
+	int x=0;
+	int y=0;
+	for (int i = 0; i<nSeats; i++) {
+		if (seats[i] != null) {
+			x++;
+		}
+		if (seats[i] == null) {
+			if (x>y) {
+				y=x;
+			}
+			x=0;
+		}
+	}
+	if (x>y) {
+		y=x;
+	}
+	return y;
 }
 
 
 @Override
 public Double getPrice(Seat seat) {
-	// TODO Auto-generated method stub
-	return null;
+	double x = 0;
+	if (seat.getEvent() != this) {
+		return x;
+	}
+	if (seat.getType() == Configuration.Type.NORMAL) {
+		x = price;
+	}
+	if (seat.getType() == Configuration.Type.ADVANCE_SALE) {
+		x = price*((100-discountAdvanceSale)/100);
+	}
+	return x;
 }
 
 
 @Override
 public Double getCollectionEvent() {
-	// TODO Auto-generated method stub
-	return null;
+	double x = 0;
+	for (int i = 0; i<nSeats; i++) {
+		if(seats[i] != null) {
+			x = x + getPrice(seats[i]);
+		}
+	}
+	return x;
 }
 
 
 @Override
 public int getPosPerson(Person p) {
-	// TODO Auto-generated method stub
-	return 0;
+	int x=0;
+	for (int i = 0; i<nSeats; i++) {
+		if(seats[i].getHolder() == p) {
+			x=i;
+			break;
+		}
+	}
+	return x+1;
 }
 
 
 @Override
 public boolean isAdvanceSale(Person p) {
-	// TODO Auto-generated method stub
+	if(seats[getPosPerson(p)-1].getType() == Configuration.Type.ADVANCE_SALE) {
+		return true;
+	}
 	return false;
 }
    
