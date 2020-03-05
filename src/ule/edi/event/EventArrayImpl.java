@@ -287,7 +287,7 @@ public Double getCollectionEvent() {
 
 @Override
 public int getPosPerson(Person p) {
-	int x=0;
+	int x=-2;
 	for (int i = 0; i<nSeats; i++) {
 		if (seats[i]!=null) {
 			if(seats[i].getHolder() == p) {
