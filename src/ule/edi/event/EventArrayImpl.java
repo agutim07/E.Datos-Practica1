@@ -82,8 +82,10 @@ public int getNumberOfSoldSeats() {
 public int getNumberOfNormalSaleSeats() {
 	int normal = 0;
 	for (int i = 0; i<nSeats; i++) {
-		if (seats[i].getType() == Configuration.Type.NORMAL) {
-			normal++;
+		if (seats[i]!=null) {
+			if (seats[i].getType() == Configuration.Type.NORMAL) {
+				normal++;
+			}
 		}
 	}
 	return normal;
@@ -94,8 +96,10 @@ public int getNumberOfNormalSaleSeats() {
 public int getNumberOfAdvanceSaleSeats() {
 	int advance = 0;
 	for (int i = 0; i<nSeats; i++) {
-		if (seats[i].getType() == Configuration.Type.ADVANCE_SALE) {
-			advance++;
+		if (seats[i]!=null) {
+			if (seats[i].getType() == Configuration.Type.ADVANCE_SALE) {
+				advance++;
+			}
 		}
 	}
 	return advance;
@@ -145,7 +149,7 @@ public boolean sellSeat(int pos, Person p, boolean advanceSale) {
 	if (pos <= 0 || pos > seats.length-1) {
 		return false;
 	}
-	if (seats[pos-1] == null) {
+	if (seats[pos-1] != null) {
 		return false;
 	}
 	Type x = null;
@@ -164,9 +168,11 @@ public boolean sellSeat(int pos, Person p, boolean advanceSale) {
 public int getNumberOfAttendingChildren() {
 	int children = 0;
 	for (int i = 0; i<nSeats; i++) {
-		Person x = seats[i].getHolder(); 
-		if (x.getAge() < Configuration.CHILDREN_EXMAX_AGE) {
-			children++;
+		if(seats[i]!=null) {
+			Person x = seats[i].getHolder(); 
+			if (x.getAge() < Configuration.CHILDREN_EXMAX_AGE) {
+				children++;
+			}
 		}
 	}
 	return children;
@@ -177,9 +183,11 @@ public int getNumberOfAttendingChildren() {
 public int getNumberOfAttendingAdults() {
 	int adults = 0;
 	for (int i = 0; i<nSeats; i++) {
-		Person x = seats[i].getHolder(); 
-		if (Configuration.CHILDREN_EXMAX_AGE <= x.getAge() && x.getAge() < Configuration.ELDERLY_PERSON_INMIN_AGE ) {
-			adults++;
+		if(seats[i]!=null) {
+			Person x = seats[i].getHolder(); 
+			if (Configuration.CHILDREN_EXMAX_AGE <= x.getAge() && x.getAge() < Configuration.ELDERLY_PERSON_INMIN_AGE ) {
+				adults++;
+			}
 		}
 	}
 	return adults;
@@ -190,9 +198,11 @@ public int getNumberOfAttendingAdults() {
 public int getNumberOfAttendingElderlyPeople() {
 	int ederly = 0;
 	for (int i = 0; i<nSeats; i++) {
-		Person x = seats[i].getHolder(); 
-		if (x.getAge() >= Configuration.ELDERLY_PERSON_INMIN_AGE ) {
-			ederly++;
+		if(seats[i]!=null) {
+			Person x = seats[i].getHolder(); 
+			if (x.getAge() >= Configuration.ELDERLY_PERSON_INMIN_AGE ) {
+				ederly++;
+			}
 		}
 	}
 	return ederly;
@@ -201,15 +211,27 @@ public int getNumberOfAttendingElderlyPeople() {
 
 @Override
 public List<Integer> getAvailableSeatsList() {
-	// TODO Auto-generated method stub
-	return null;
+	List<Integer> lista = new ArrayList<Integer>();
+	for (int i = 0; i<nSeats; i++) {
+		if (seats[i] == null) {
+			lista.add(i+1);
+		}
+	}
+	return lista;
 }
 
 
 @Override
 public List<Integer> getAdvanceSaleSeatsList() {
-	// TODO Auto-generated method stub
-	return null;
+	List<Integer> lista = new ArrayList<Integer>();
+	for (int i = 0; i<nSeats; i++) {
+		if (seats[i] != null) {
+			if(seats[i].getType() == Configuration.Type.ADVANCE_SALE) {
+				lista.add(i+1);
+			}
+		}
+	}
+	return lista;
 }
 
 
@@ -218,10 +240,10 @@ public int getMaxNumberConsecutiveSeats() {
 	int x=0;
 	int y=0;
 	for (int i = 0; i<nSeats; i++) {
-		if (seats[i] != null) {
+		if (seats[i] == null) {
 			x++;
 		}
-		if (seats[i] == null) {
+		if (seats[i] != null) {
 			if (x>y) {
 				y=x;
 			}
@@ -245,7 +267,7 @@ public Double getPrice(Seat seat) {
 		x = price;
 	}
 	if (seat.getType() == Configuration.Type.ADVANCE_SALE) {
-		x = price*((100-discountAdvanceSale)/100);
+		x = price*((price-discountAdvanceSale)/100);
 	}
 	return x;
 }
@@ -267,9 +289,11 @@ public Double getCollectionEvent() {
 public int getPosPerson(Person p) {
 	int x=0;
 	for (int i = 0; i<nSeats; i++) {
-		if(seats[i].getHolder() == p) {
-			x=i;
-			break;
+		if (seats[i]!=null) {
+			if(seats[i].getHolder() == p) {
+				x=i;
+				break;
+			}
 		}
 	}
 	return x+1;
@@ -278,8 +302,8 @@ public int getPosPerson(Person p) {
 
 @Override
 public boolean isAdvanceSale(Person p) {
-	if(seats[getPosPerson(p)-1].getType() == Configuration.Type.ADVANCE_SALE) {
-		return true;
+		if(seats[getPosPerson(p)-1].getType() == Configuration.Type.ADVANCE_SALE) {
+			return true;
 	}
 	return false;
 }
